@@ -54,14 +54,46 @@
 		1430C5081DCB65AF001F473B /* MovieApp */ = {
 			isa = PBXGroup;
 			children = (
-				1430C5091DCB65AF001F473B /* AppDelegate.swift */,
+				1430C51E1DCB66B4001F473B /* Model */,
+				1430C51D1DCB66B0001F473B /* View */,
+				1430C51C1DCB66AB001F473B /* Controller */,
+				1430C51B1DCB66A4001F473B /* Supporting Files */,
+			);
+			path = MovieApp;
+			sourceTree = "<group>";
+		};
+		1430C51B1DCB66A4001F473B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				1430C5151DCB65AF001F473B /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		1430C51C1DCB66AB001F473B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
 				1430C50B1DCB65AF001F473B /* ViewController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		1430C51D1DCB66B0001F473B /* View */ = {
+			isa = PBXGroup;
+			children = (
 				1430C50D1DCB65AF001F473B /* Main.storyboard */,
 				1430C5101DCB65AF001F473B /* Assets.xcassets */,
 				1430C5121DCB65AF001F473B /* LaunchScreen.storyboard */,
-				1430C5151DCB65AF001F473B /* Info.plist */,
 			);
-			path = MovieApp;
+			name = View;
+			sourceTree = "<group>";
+		};
+		1430C51E1DCB66B4001F473B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1430C5091DCB65AF001F473B /* AppDelegate.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -96,6 +128,7 @@
 				TargetAttributes = {
 					1430C5051DCB65AF001F473B = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = PK9ZTBKL3B;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -260,6 +293,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = PK9ZTBKL3B;
 				INFOPLIST_FILE = MovieApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.arthuralvarez.MovieApp;
@@ -272,6 +306,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = PK9ZTBKL3B;
 				INFOPLIST_FILE = MovieApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.arthuralvarez.MovieApp;
@@ -299,6 +334,7 @@
 				1430C51A1DCB65AF001F473B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
