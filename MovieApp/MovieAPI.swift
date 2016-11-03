@@ -21,6 +21,7 @@ class MovieAPI: NSObject {
     
     private static let API_KEY = "1f54bd990f1cdfb230adb312546d765d"
     private static let BASE_URL = "https://api.themoviedb.org/3/"
+    private static let CURRENT_LANGUAGE = "en-US"
     public static var delegate : MovieAPIDelegate?
     
     // MARK: - General Methods
@@ -44,7 +45,7 @@ class MovieAPI: NSObject {
         // Add API key
         resultURL = resultURL + "api_key=" + API_KEY
         
-        return resultURL
+        return resultURL.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
     }
     
     // MARK: - Movie Genre Methods
@@ -61,7 +62,7 @@ class MovieAPI: NSObject {
         config.httpAdditionalHeaders = ["Accept" : "application/json"]
         let session = URLSession(configuration: config, delegate: nil, delegateQueue: nil)
         let path = "genre/movie/list"
-        let arguments = ["language" : "en-US"]
+        let arguments = ["language" : CURRENT_LANGUAGE]
         let url = URL(string: formatURL(path: path, arguments: arguments))!
         
         // Set data task
@@ -137,17 +138,21 @@ class MovieAPI: NSObject {
     /**
      Fetch a list of movies.
      - parameter path: The path of the API service.
+     - parameter arguments: Aditional parameters for URL Query
      - parameter page: The requested page of the movie list.
      - parameter onComplete: Callback  method. Params: Bool indicating success, Touple indicating current page and number of pages, Array of MovieData containing the fetched data.
      */
-    class func fetchListOfMovies(path: String, page : Int, onComplete : @escaping ( Bool, (Int, Int), [MovieData])->Void){
+    class func fetchListOfMovies(path: String, arguments: [String : String], page : Int, onComplete : @escaping ( Bool, (Int, Int), [MovieData])->Void){
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = URLRequest.CachePolicy.reloadIgnoringCacheData
         config.httpAdditionalHeaders = ["Accept" : "application/json"]
         let session = URLSession(configuration: config, delegate: nil, delegateQueue: nil)
-        let arguments = ["language" : "en-US", "page" : "\(page)"]
-        let url =  URL(string: formatURL(path: path, arguments: arguments))
         
+        // Concatenate arguments
+        var args = ["language" : "en-US", "page" : "\(page)"]
+        args.update(other: arguments)
+        
+        let url =  URL(string: formatURL(path: path, arguments: args))
         let dataTask = session.dataTask(with: url!, completionHandler: {(data : Data?, response : URLResponse?, error : Error?) -> Void in
             
             if error == nil{

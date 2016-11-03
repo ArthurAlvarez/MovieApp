@@ -1,5 +1,5 @@
 //
-//  UpcomingMoviesViewController.swift
+//  MovieSearchViewController.swift
 //  MovieApp
 //
 //  Created by Arthur Alvarez on 03/11/16.
@@ -9,18 +9,18 @@
 import UIKit
 import MBProgressHUD
 
-class UpcomingMoviesViewController: UIViewController, MovieAPIDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+class MovieSearchViewController: UIViewController, MovieAPIDelegate, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate  {
     
     // MARK: - Storyboard Outlets
     @IBOutlet weak var movieSearchBar: UISearchBar!
-    @IBOutlet weak var upcomingMoviesTableView: UITableView!
+    @IBOutlet weak var moviesTableView: UITableView!
     
     // MARK: - Class Properties
+    var searchQuery : String!
     private var moviesList : [MovieData] = []
     private var numberOfPages : Int = 1
     private var currentPage : Int = 1
     private var selectedIndex : Int = 0
-    private var searchQuery : String = ""
     private var tapGestureRecognizer : UITapGestureRecognizer!
     
     // MARK: - View Lifecycle
@@ -29,81 +29,58 @@ class UpcomingMoviesViewController: UIViewController, MovieAPIDelegate, UITableV
         
         // Set properties
         MovieAPI.delegate = self
-        upcomingMoviesTableView.dataSource = self
-        upcomingMoviesTableView.delegate = self
-        movieSearchBar.delegate = self
+        moviesTableView.dataSource = self
+        moviesTableView.delegate = self
+        self.movieSearchBar.delegate = self
         
-        self.tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UpcomingMoviesViewController.dismissKeyboard))
+        self.tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(MovieSearchViewController.dismissKeyboard))
         self.tapGestureRecognizer.cancelsTouchesInView = true
         
-        // Start API communication
-        startAPI()
+        // Fetch search results
+        requestMoviePage(searchQuery: searchQuery, page: currentPage)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.navigationItem.title = "Upcoming Movies"
+        self.navigationItem.title = "Movie Search"
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         self.navigationItem.title = ""
         self.view.endEditing(true)
-        
+
         if(segue.identifier == "showMovieDetail"){
             let controller = segue.destination as! MovieDetailViewController
-            controller.movieData = moviesList[selectedIndex]
+            controller.movieData = self.moviesList[selectedIndex]
         }
-        else if(segue.identifier == "startSearch"){
-            let controller = segue.destination as! MovieSearchViewController
-            controller.searchQuery = self.searchQuery
-        }
-    }
-    
-    // MARK: - API Methods
-    
-    /**
-     Starts the API fetching movie genres and first page of upcoming movies
-     */
-    func startAPI(){
-        let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
-        hud.label.text = "Connecting"
-        MovieAPI.fetchMovieGenres(onComplete: {(success : Bool) -> Void in
-            DispatchQueue.main.async {
-                MBProgressHUD.hide(for: self.view, animated: true)
-                if(success){
-                    print("Genres parsed with success. Fetching movie data.")
-                    self.requestMoviePage(page: 1)
-                }
-                else{
-                    // Show alert message and try again
-                    self.showAlertWith(message: "Could not fetch server data. Try Again.", onComplete: {()->Void in
-                        self.startAPI()
-                    })
-                }
-            }
-        })
     }
     
     /**
      Request a list of movies and display on the table view
      */
-    func requestMoviePage(page : Int){
+    func requestMoviePage(searchQuery: String, page : Int){
         print("requesting page \(page)")
         let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
         hud.label.text = "Loading movies"
-        MovieAPI.fetchListOfMovies(path: "movie/upcoming", arguments: [:], page: page, onComplete: {(status : Bool, pages : (Int, Int),  movies : [MovieData]) -> Void in
+        MovieAPI.fetchListOfMovies(path: "search/movie", arguments: ["query": searchQuery], page: page, onComplete: {(status : Bool, pages : (Int, Int),  movies : [MovieData]) -> Void in
             DispatchQueue.main.async {
                 MBProgressHUD.hide(for: self.view, animated: true)
                 if(status == true){
                     self.currentPage = pages.0
                     self.numberOfPages = pages.1
                     self.moviesList.append(contentsOf: movies)
-                    self.upcomingMoviesTableView.reloadData()
+                    
+                    if(self.currentPage == 1){
+                        // Scroll to top
+                        self.moviesTableView.setContentOffset(CGPoint.zero, animated: false)
+                    }
+                    
+                    self.moviesTableView.reloadData()
                 }
                 else{
                     self.showAlertWith(message: "Could not load the movies list. Try Again.", onComplete: {()->Void in
-                        self.requestMoviePage(page: page)
+                        self.requestMoviePage(searchQuery : searchQuery, page: page)
                     })
                 }
             }
@@ -137,7 +114,7 @@ class UpcomingMoviesViewController: UIViewController, MovieAPIDelegate, UITableV
         // Request next page if needed
         if(indexPath.row == moviesList.count - 1){
             if(currentPage < numberOfPages){
-                requestMoviePage(page: currentPage + 1)
+                requestMoviePage(searchQuery: self.searchQuery, page: currentPage + 1)
             }
         }
         
@@ -160,14 +137,21 @@ class UpcomingMoviesViewController: UIViewController, MovieAPIDelegate, UITableV
                     break
                 }
             }
-            self.upcomingMoviesTableView.reloadData()
+            self.moviesTableView.reloadData()
         }
     }
     
     // MARK: - Search Bar Delegate
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        self.searchQuery = searchBar.text!
-        performSegue(withIdentifier: "startSearch", sender: self)
+        self.searchQuery = searchBar.text
+        self.dismissKeyboard()
+        
+        // Reset movies list
+        self.moviesList = []
+        self.currentPage = 1
+        self.numberOfPages = 1
+        
+        requestMoviePage(searchQuery: self.searchQuery, page: self.currentPage)
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -177,7 +161,6 @@ class UpcomingMoviesViewController: UIViewController, MovieAPIDelegate, UITableV
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         self.view.removeGestureRecognizer(self.tapGestureRecognizer)
     }
-    
     
     // MARK: - Auxiliary Methods
     func showAlertWith(message : String, onComplete : @escaping ()->Void){
