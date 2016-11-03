@@ -75,10 +75,19 @@ class MovieSearchViewController: UIViewController, MovieAPIDelegate, UITableView
                         // Scroll to top
                         self.moviesTableView.setContentOffset(CGPoint.zero, animated: false)
                     }
-                    
                     self.moviesTableView.reloadData()
+                    
+                    // Check if result is empty
+                    if(movies.count == 0){
+                        let alert = UIAlertController(title: "Movie App", message: "There were no results for your search.", preferredStyle: UIAlertControllerStyle.alert)
+                        let action = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil)
+                        
+                        alert.addAction(action)
+                        self.present(alert, animated: true, completion: nil)
+                    }
                 }
                 else{
+                    // Could not load data
                     self.showAlertWith(message: "Could not load the movies list. Try Again.", onComplete: {()->Void in
                         self.requestMoviePage(searchQuery : searchQuery, page: page)
                     })
