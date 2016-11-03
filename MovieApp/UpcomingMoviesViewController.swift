@@ -32,6 +32,21 @@ class UpcomingMoviesViewController: UIViewController, MovieAPIDelegate, UITableV
         startAPI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationItem.title = "Upcoming Movies"
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        self.navigationItem.title = ""
+        
+        if(segue.identifier == "showMovieDetail"){
+            let controller = segue.destination as! MovieDetailViewController
+            controller.movieData = moviesList[selectedIndex]
+        }
+    }
+    
     // MARK: - API Methods
     
     /**
@@ -108,6 +123,13 @@ class UpcomingMoviesViewController: UIViewController, MovieAPIDelegate, UITableV
         }
         
         return cell
+    }
+    
+    // MARK: - Table View Delegate
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedIndex = indexPath.row
+        tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: "showMovieDetail", sender: self)
     }
     
     // MARK: - Movie API Delegate

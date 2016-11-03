@@ -16,6 +16,7 @@
 		14D442421DCB6EDB001DC384 /* MovieAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D442411DCB6EDB001DC384 /* MovieAPI.swift */; };
 		14D442441DCB6F33001DC384 /* MovieGenre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D442431DCB6F33001DC384 /* MovieGenre.swift */; };
 		14D442461DCB7225001DC384 /* MovieData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D442451DCB7225001DC384 /* MovieData.swift */; };
+		14D442481DCB82E9001DC384 /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14D442471DCB82E9001DC384 /* MovieDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		14D442411DCB6EDB001DC384 /* MovieAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieAPI.swift; sourceTree = "<group>"; };
 		14D442431DCB6F33001DC384 /* MovieGenre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieGenre.swift; sourceTree = "<group>"; };
 		14D442451DCB7225001DC384 /* MovieData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieData.swift; sourceTree = "<group>"; };
+		14D442471DCB82E9001DC384 /* MovieDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				14D4423F1DCB6E1B001DC384 /* UpcomingMoviesViewController.swift */,
+				14D442471DCB82E9001DC384 /* MovieDetailViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -201,6 +204,7 @@
 				1430C5221DCB6CAE001F473B /* UpcomingMovieTableViewCell.swift in Sources */,
 				14D442401DCB6E1B001DC384 /* UpcomingMoviesViewController.swift in Sources */,
 				14D442441DCB6F33001DC384 /* MovieGenre.swift in Sources */,
+				14D442481DCB82E9001DC384 /* MovieDetailViewController.swift in Sources */,
 				1430C50A1DCB65AF001F473B /* AppDelegate.swift in Sources */,
 				14D442421DCB6EDB001DC384 /* MovieAPI.swift in Sources */,
 			);
