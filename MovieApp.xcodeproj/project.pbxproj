@@ -200,7 +200,6 @@
 				TargetAttributes = {
 					1430C5051DCB65AF001F473B = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = PK9ZTBKL3B;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -423,7 +422,7 @@
 			baseConfigurationReference = 7C1E9CBDC3A54D8CEC38F09A /* Pods-MovieApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = PK9ZTBKL3B;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MovieApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.arthuralvarez.MovieApp;
@@ -437,7 +436,7 @@
 			baseConfigurationReference = B8F9F0F2AEC72C837C81AEF2 /* Pods-MovieApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = PK9ZTBKL3B;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MovieApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.arthuralvarez.MovieApp;
