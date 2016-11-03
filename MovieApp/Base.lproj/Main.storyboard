@@ -44,6 +44,7 @@
                         <subviews>
                             <searchBar contentMode="redraw" barStyle="black" placeholder="Search movies" translatesAutoresizingMaskIntoConstraints="NO" id="X4R-4D-AF6">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="200" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="RFe-WI-pwv">
@@ -279,6 +280,7 @@
                         <subviews>
                             <searchBar contentMode="redraw" barStyle="black" placeholder="Search movies" translatesAutoresizingMaskIntoConstraints="NO" id="7nD-fp-rg7">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="200" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="evy-u3-NDY">
@@ -400,6 +402,6 @@
         <image name="disclosure_symbol" width="512" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="tgk-DY-N9j"/>
+        <segue reference="GqI-tM-AYC"/>
     </inferredMetricsTieBreakers>
 </document>
