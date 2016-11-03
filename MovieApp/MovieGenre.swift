@@ -12,6 +12,9 @@ import UIKit
     Contains information about a specific movie genre
  */
 class MovieGenre: NSObject {
+    
+    static var genres : [MovieGenre]!
+    
     var genreID : Int!
     var name : String!
 }

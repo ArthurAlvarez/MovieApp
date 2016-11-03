@@ -19,10 +19,9 @@ class MovieAPI: NSObject {
     
     // MARK: - Class Properties
     
-    private static let API_KEY = "1f54bd990f1cdfb230adb312546d765d​"
-    private static let BASE_URL = "http://api.themoviedb.org/3/"
-    private static var genres : [MovieGenre]!
-    private static var delegate : MovieAPIDelegate?
+    private static let API_KEY = "1f54bd990f1cdfb230adb312546d765d"
+    private static let BASE_URL = "https://api.themoviedb.org/3/"
+    public static var delegate : MovieAPIDelegate?
     
     // MARK: - General Methods
     
@@ -52,21 +51,21 @@ class MovieAPI: NSObject {
     
     /**
      Fetch list of movie genres
-     - parameter path: The path of the API service.
-     - parameter arguments: The arguments to be passed through the URL query string.
      - parameter onComplete: Callback method with Boolean parameter indicating the success of the operation.
      */
-    class func fetchMovieGenres(path : String, arguments : [String : String], onComplete : @escaping (Bool)->Void){
+    class func fetchMovieGenres(onComplete : @escaping (Bool)->Void){
         
         // Configure URL Session
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = URLRequest.CachePolicy.reloadIgnoringCacheData
         config.httpAdditionalHeaders = ["Accept" : "application/json"]
         let session = URLSession(configuration: config, delegate: nil, delegateQueue: nil)
-        let url =  URL(string: formatURL(path: path, arguments: arguments))
+        let path = "genre/movie/list"
+        let arguments = ["language" : "en-US"]
+        let url = URL(string: formatURL(path: path, arguments: arguments))!
         
         // Set data task
-        let dataTask = session.dataTask(with: url!, completionHandler: {(data : Data?, response : URLResponse?, error : Error?) -> Void in
+        let dataTask = session.dataTask(with: url, completionHandler: {(data : Data?, response : URLResponse?, error : Error?) -> Void in
             
             if error == nil{
                 // Successful Request
@@ -97,7 +96,7 @@ class MovieAPI: NSObject {
      - parameter onComplete: Callback method with Boolean parameter indicating the success of the operation.
      */
     private class func parseMovieGenres(data : Data, onComplete : (Bool)->Void){
-        genres = []
+        MovieGenre.genres = []
         
         let json = (try! JSONSerialization.jsonObject(with: data, options: []) as! [String : Any])
         let items = json["genres"] as! [[String : Any]]
@@ -106,14 +105,14 @@ class MovieAPI: NSObject {
         noGenre.genreID = -1
         noGenre.name = "Undefined"
         
-        genres.append(noGenre)
+        MovieGenre.genres.append(noGenre)
         
         for item in items{
             let newGenre = MovieGenre()
             newGenre.genreID = item["id"] as! Int
             newGenre.name = item["name"] as! String
             
-            genres.append(newGenre)
+            MovieGenre.genres.append(newGenre)
         }
         
         onComplete(true)
@@ -125,7 +124,7 @@ class MovieAPI: NSObject {
      - returns: String containing genre name.
      */
     private class func getMovieGenreBy(id : Int)->String{
-        for g in genres{
+        for g in MovieGenre.genres{
             if(g.genreID == id){
                 return g.name
             }
@@ -138,15 +137,15 @@ class MovieAPI: NSObject {
     /**
      Fetch a list of movies.
      - parameter path: The path of the API service.
-     - parameter arguments: The arguments to be passed through the URL query string.
+     - parameter page: The requested page of the movie list.
      - parameter onComplete: Callback  method. Params: Bool indicating success, Touple indicating current page and number of pages, Array of MovieData containing the fetched data.
      */
-    class func fetchListOfMovies(path : String, arguments : [String : String], onComplete : @escaping ( Bool, (Int, Int), [MovieData])->Void){
+    class func fetchListOfMovies(path: String, page : Int, onComplete : @escaping ( Bool, (Int, Int), [MovieData])->Void){
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = URLRequest.CachePolicy.reloadIgnoringCacheData
         config.httpAdditionalHeaders = ["Accept" : "application/json"]
-        
         let session = URLSession(configuration: config, delegate: nil, delegateQueue: nil)
+        let arguments = ["language" : "en-US", "page" : "\(page)"]
         let url =  URL(string: formatURL(path: path, arguments: arguments))
         
         let dataTask = session.dataTask(with: url!, completionHandler: {(data : Data?, response : URLResponse?, error : Error?) -> Void in
@@ -226,9 +225,8 @@ class MovieAPI: NSObject {
     private class func getBackdropImageForMovie(movie : MovieData){
         let config = URLSessionConfiguration.default
         config.requestCachePolicy = NSURLRequest.CachePolicy.returnCacheDataElseLoad
-        
         let session = URLSession(configuration: config, delegate: nil, delegateQueue: nil)
-        let url =  URL(string: "http://image.tmdb.org/t/p/w780/" + movie.backdrop_path)
+        let url =  URL(string: "https://image.tmdb.org/t/p/w780/" + movie.backdrop_path)
         
         let dataTask = session.dataTask(with: url!, completionHandler: {(data : Data?, response : URLResponse?, error : Error?) -> Void in
             
@@ -263,10 +261,9 @@ class MovieAPI: NSObject {
      Fetch poster image for specific movie.
      - parameter movie: The correspondent movie.
      - parameter onComplete: Callback function containing the success of operation and fetched image
-    */
+     */
     class func getPosterImageForMovie(movie : MovieData, onComplete : @escaping (Int, UIImage?)->Void){
         let config = URLSessionConfiguration.default
-        
         let session = URLSession(configuration: config, delegate: nil, delegateQueue: nil)
         let url =  URL(string: "https://image.tmdb.org/t/p/w500/" + movie.poster_path)
         
@@ -295,5 +292,4 @@ class MovieAPI: NSObject {
         })
         dataTask.resume()
     }
-    
 }
