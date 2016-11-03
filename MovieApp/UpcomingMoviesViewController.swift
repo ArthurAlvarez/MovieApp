@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MBProgressHUD
 
 class UpcomingMoviesViewController: UIViewController, MovieAPIDelegate, UITableViewDataSource, UITableViewDelegate {
     
@@ -53,8 +54,11 @@ class UpcomingMoviesViewController: UIViewController, MovieAPIDelegate, UITableV
      Starts the API fetching movie genres and first page of upcoming movies
      */
     func startAPI(){
+        let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        hud.label.text = "Connecting"
         MovieAPI.fetchMovieGenres(onComplete: {(success : Bool) -> Void in
             DispatchQueue.main.async {
+                MBProgressHUD.hide(for: self.view, animated: true)
                 if(success){
                     print("Genres parsed with success. Fetching movie data.")
                     self.requestMoviePage(page: 1)
@@ -74,8 +78,11 @@ class UpcomingMoviesViewController: UIViewController, MovieAPIDelegate, UITableV
      */
     func requestMoviePage(page : Int){
         print("requesting page \(page)")
+        let hud = MBProgressHUD.showAdded(to: self.view, animated: true)
+        hud.label.text = "Loading movies"
         MovieAPI.fetchListOfMovies(path: "movie/upcoming", page: page, onComplete: {(status : Bool, pages : (Int, Int),  movies : [MovieData]) -> Void in
             DispatchQueue.main.async {
+                MBProgressHUD.hide(for: self.view, animated: true)
                 if(status == true){
                     self.currentPage = pages.0
                     self.numberOfPages = pages.1
@@ -145,7 +152,7 @@ class UpcomingMoviesViewController: UIViewController, MovieAPIDelegate, UITableV
         }
     }
     
-    // MARK: - Auxiliar Methods
+    // MARK: - Auxiliary Methods
     func showAlertWith(message : String, onComplete : @escaping ()->Void){
         let alert = UIAlertController(title: "Movie App", message: message, preferredStyle: UIAlertControllerStyle.alert)
         
