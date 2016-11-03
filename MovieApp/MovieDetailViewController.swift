@@ -45,7 +45,7 @@ class MovieDetailViewController: UIViewController {
         }
         else{
             self.posterActivityIndicator.stopAnimating()
-            self.moviePosterImageView.image = UIImage(named: "no_image_backdrop")
+            self.moviePosterImageView.image = UIImage(named: "no_image_poster")
         }
     }
 }
